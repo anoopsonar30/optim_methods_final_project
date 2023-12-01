@@ -39,8 +39,8 @@ for i in range (len(free_vertices[0])):
 
 # Set the bound of the figure
 plt.figure()
-plt.xlim(0, 100)
-plt.ylim(0, 100)
+# plt.xlim(0, 100)
+# plt.ylim(0, 100)
 
 # Plot the obstacle
 for obstacle in obstacles:
