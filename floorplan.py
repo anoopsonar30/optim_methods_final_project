@@ -416,6 +416,28 @@ def get_seed_points():
     return seed_points
 
 
+def get_seed_points2():
+    seed_points = np.array(
+        [
+            [3.489958, 2.697444],
+            [3.881697, 1.682553],
+            [3.356850, 1.679358],
+            [3.697652, 1.694607],
+            [2.326985, 1.771184],
+            [2.572353, 1.724167],
+            [2.798620, 1.688904],
+            [3.646388, 2.097361],
+            [5.443304, 1.236370],
+            [3.575495, 1.081113],
+            [3.503869, 1.318649],
+        ]
+    )
+    seed_points = seed_points * 1e3
+    n_seeds = len(seed_points)
+    assert seed_points.shape == (n_seeds, 2)
+    return seed_points
+
+
 def get_floorplan_image() -> Image.Image:
     image_path = pathlib.Path("32_2.jpg")
     im = Image.open(image_path)
