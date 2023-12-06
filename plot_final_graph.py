@@ -3,12 +3,9 @@ import pickle
 import ipdb
 import matplotlib.pyplot as plt
 import numpy as np
-import tqdm
 from matplotlib.collections import LineCollection, PatchCollection
-from pydrake.geometry.optimization import HPolyhedron, Iris, IrisOptions, VPolytope
-from scipy.spatial import ConvexHull
 
-from floorplan import get_dests, get_floorplan_image, get_lines, get_rects, get_seed_points, get_sources
+from floorplan import get_dests, get_floorplan_image, get_lines, get_rects, get_sources
 
 
 def main():
@@ -17,6 +14,9 @@ def main():
     rects = get_rects()
     dests = get_dests()
     srcs = get_sources()
+
+    with open("iris_polygons3.pkl", "rb") as f:
+        free_polys = pickle.load(f)
 
     scale = 1e3
     lines = lines / scale
@@ -43,9 +43,13 @@ def main():
 
     # Plot sources.
     ax.scatter(srcs[:, 0], srcs[:, 1], color="C0", zorder=6)
-    # for ii, dest in enumerate(dests):
-    #     ax.plot(dest[0], dest[1], marker="o", color=f"C{ii}", zorder=6)
 
+    # Plot iris regions.
+    patches = []
+    for free_poly in free_polys:
+        patches.append(plt.Polygon(free_poly, closed=True))
+    col = PatchCollection(patches, facecolor="C5", alpha=0.3, zorder=4)
+    ax.add_collection(col)
 
     fig.savefig("floorplan_final.pdf")
 
