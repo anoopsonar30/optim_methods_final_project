@@ -438,6 +438,38 @@ def get_seed_points2():
     return seed_points
 
 
+def get_sources():
+    srcs = np.array(
+        [
+            [1524, 2096],
+            [4932, 1768],
+            [4628, 1432],
+        ]
+    )
+    assert srcs.shape == (len(srcs), 2)
+    return srcs
+
+
+def get_dests():
+    dests = np.array(
+        [
+            [1388, 1560],
+            [6200, 1856],
+            [4404, 1952],
+            [3840, 2508],
+            [3344, 2840],
+            [2480, 1004],
+            [3352, 1481],
+            [3768, 1525],
+            [3604, 1905],
+            [3376, 1889],
+            [3376, 1889],
+        ]
+    )
+    assert dests.shape == (len(dests), 2)
+    return dests
+
+
 def get_floorplan_image() -> Image.Image:
     image_path = pathlib.Path("32_2.jpg")
     im = Image.open(image_path)
