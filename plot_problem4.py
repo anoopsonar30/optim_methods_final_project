@@ -92,6 +92,8 @@ def main():
         fig.savefig(plot_dir / f"p4_min_{label}.png", bbox_inches="tight")
         plt.close(fig)
 
+        print("Times: {}, Dists: {}".format(total_times_str, total_dists_str))
+
         ts.append(total_times.max())
         ds.append(total_dists.max())
 

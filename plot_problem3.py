@@ -26,6 +26,7 @@ def main():
     sol_dist_npz = np.load("sols/problem3_dist.npz")
 
     for npz, label in [(sol_time_npz, "time"), (sol_dist_npz, "dist")]:
+        # (n_dest, n_dest)
         x0 = npz["x0"]
         # (n_d2d, n_dest, n_dest)
         x1 = npz["x1"]
@@ -45,14 +46,25 @@ def main():
 
         fig, ax = get_wall_figure(dpi=500)
 
+        n_robots_tmp = 0
+        rbt_idx = np.full(n_dst, 100, dtype=np.int32)
         dst_idx = np.full(n_dst, 100, dtype=np.int32)
+
+        n_robots = int(np.round(x0.sum()))
+        robot_times = np.zeros(n_robots)
+        robot_dists = np.zeros(n_robots)
 
         # Plot from src -> dst.
         for ii in range(n_src):
             for jj in range(n_dst):
                 if x0[ii, jj] > 0.0:
                     dst_idx[jj] = ii
+                    rbt_idx[jj] = n_robots_tmp
+                    n_robots_tmp += 1
                     color = colors[ii]
+
+                    robot_times[rbt_idx[jj]] += T_s2d[ii, jj]
+                    robot_dists[rbt_idx[jj]] += L_s2d[ii, jj]
 
                     traj = trajs_s2d[(ii, jj)]
                     ax.plot(traj[:, 0], traj[:, 1], color=color, alpha=0.8)
@@ -68,8 +80,14 @@ def main():
 
                         # We have moved from ii -> jj. Update the dst_idx.
                         dst_idx[jj] = dst_idx[ii]
+                        rbt_idx[jj] = rbt_idx[ii]
+
                         color = colors[dst_idx[ii]]
+                        rbt_idx[ii] = 100
                         dst_idx[ii] = 100
+
+                        robot_times[rbt_idx[jj]] += T_d2d[ii, jj]
+                        robot_dists[rbt_idx[jj]] += L_d2d[ii, jj]
 
                         traj = trajs_d2d[(ii, jj)]
                         if len(traj) > 0:
@@ -83,6 +101,12 @@ def main():
         fig.savefig(plot_dir / f"p3_min_{label}.pdf", bbox_inches="tight")
         fig.savefig(plot_dir / f"p3_min_{label}.png", bbox_inches="tight")
         plt.close(fig)
+
+        robot_times = np.sort(np.array(robot_times))
+        robot_dists = np.sort(np.array(robot_dists))
+        times_str = ", ".join(["{:.2f}".format(tt) for tt in np.sort(robot_times)])
+        dists_str = ", ".join(["{:.2f}".format(tt) for tt in np.sort(robot_dists)])
+        print("Times: {}, Dists: {}".format(times_str, dists_str))
 
 
 if __name__ == "__main__":
