@@ -4,7 +4,7 @@ import ipdb
 import matplotlib.pyplot as plt
 import numpy as np
 
-from floorplan import get_src_dst_scaled, get_wall_figure, load_gcs_trajs
+from floorplan import get_src_dst_scaled, get_wall_figure, load_gcs_trajs, load_time_and_dist
 
 
 def main():
@@ -14,15 +14,25 @@ def main():
     srcs, dsts = get_src_dst_scaled()
     trajs_s2d, trajs_d2d = load_gcs_trajs()
 
+    # (n_src, n_dst)
+    # (n_src, n_dst)
+    # (n_dst, n_dst)
+    # (n_dst, n_dst)
+    T_s2d, L_s2d, T_d2d, L_d2d = load_time_and_dist()
+
     n_src, n_dst = len(srcs), len(dsts)
 
     sol_time_npz = np.load("sols/problem2_time.npz")
     sol_dist_npz = np.load("sols/problem2_dist.npz")
 
-    linestyles = ["-", "--", ":"]
+    colors = ["C2", "C4", "C5"]
 
     for npz, label in [(sol_time_npz, "time"), (sol_dist_npz, "dist")]:
         x = npz["x"]
+
+        # Compute the total time and total distance.
+        total_time = np.sum(T_s2d * x)
+        total_dist = np.sum(L_s2d * x)
 
         fig, ax = get_wall_figure(dpi=500)
 
@@ -31,10 +41,11 @@ def main():
             for jj in range(n_dst):
                 if x[ii, jj] > 0.0:
                     # ls = linestyles[ii]
-                    color = f"C{ii + 2}"
+                    color = colors[ii]
                     traj = trajs_s2d[(ii, jj)]
                     ax.plot(traj[:, 0], traj[:, 1], color=color, alpha=0.8)
 
+        ax.set_title("Time: {:.2f} s    Dist: {:.2f} m".format(total_time, total_dist))
         fig.savefig(plot_dir / f"p2_min_{label}.pdf", bbox_inches="tight")
         fig.savefig(plot_dir / f"p2_min_{label}.png", bbox_inches="tight")
         plt.close(fig)

@@ -531,3 +531,19 @@ def load_gcs_trajs():
     time_srcs_to_dests, length_srcs_to_dests, trajs_s2d = s2d_data
     time_dests_to_dests, length_dests_to_dests, trajs_d2d = d2d_data
     return trajs_s2d, trajs_d2d
+
+
+def load_time_and_dist():
+    files = [
+        "time_srcs_to_dests.pkl",
+        "length_srcs_to_dests.pkl",
+        "time_dests_to_dests.pkl",
+        "length_dests_to_dests.pkl",
+    ]
+    arrs = []
+    for file in files:
+        with open(file, "rb") as f:
+            arr = pickle.load(f)
+            arrs.append(arr)
+
+    return arrs
