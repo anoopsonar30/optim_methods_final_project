@@ -1,5 +1,6 @@
 import pathlib
 
+import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
 
@@ -462,7 +463,6 @@ def get_dests():
             [3768, 1525],
             [3604, 1905],
             [3376, 1889],
-            [3376, 1889],
         ]
     )
     assert dests.shape == (len(dests), 2)
@@ -474,3 +474,20 @@ def get_floorplan_image() -> Image.Image:
     im = Image.open(image_path)
     im = im.convert("RGB")
     return im
+
+
+def get_src_dst_scaled():
+    scale = 1e3
+    return get_sources() / scale, get_dests() / scale
+
+
+def get_floorplan_figure() -> tuple[plt.Figure, plt.Axes]:
+    image = get_floorplan_image()
+
+    scale = 1e3
+    imshow_extent = np.array([-0.5, image.width - 0.5, image.height - 0.5, -0.5])
+    imshow_extent = imshow_extent / scale
+
+    fig, ax = plt.subplots(figsize=(12, 5), layout="constrained")
+    ax.imshow(image, extent=imshow_extent, alpha=0.5, zorder=3)
+    return fig, ax
