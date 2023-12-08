@@ -25,7 +25,7 @@ def main():
 
         n_d2d = len(x1)
 
-        fig, ax = get_wall_figure()
+        fig, ax = get_wall_figure(dpi=500)
 
         # Plot from src -> dst.
         for ii in range(n_src):
@@ -52,7 +52,8 @@ def main():
                             src, dst = dsts[ii], dsts[jj]
                             ax.plot([src[0], dst[0]], [src[1], dst[1]], color=color, alpha=0.8)
 
-        fig.savefig(plot_dir / f"p3_min_{label}.pdf")
+        fig.savefig(plot_dir / f"p3_min_{label}.pdf", bbox_inches="tight")
+        fig.savefig(plot_dir / f"p3_min_{label}.png", bbox_inches="tight")
         plt.close(fig)
 
 

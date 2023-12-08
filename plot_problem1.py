@@ -25,14 +25,15 @@ def main():
     plot_dir.mkdir(exist_ok=True, parents=True)
 
     # fig, ax = get_floorplan_figure()
-    fig, ax = get_wall_figure()
+    fig, ax = get_wall_figure(dpi=500)
     for ii, src in enumerate(srcs):
         for jj, dst in enumerate(dsts):
             if sol_time[ii, jj] > 0.0:
                 # ax.plot([src[0], dst[0]], [src[1], dst[1]], color="C1", alpha=0.8)
                 traj = trajs_s2d[(ii, jj)]
                 ax.plot(traj[:, 0], traj[:, 1], color="C1", alpha=0.8)
-    fig.savefig(plot_dir / "p1_min_time.pdf")
+    fig.savefig(plot_dir / "p1_min_time.pdf", bbox_inches="tight")
+    fig.savefig(plot_dir / "p1_min_time.png", bbox_inches="tight")
     plt.close(fig)
 
     fig, ax = get_floorplan_figure()
@@ -43,7 +44,8 @@ def main():
                 # ax.plot([src[0], dst[0]], [src[1], dst[1]], color="C1", alpha=0.8)
                 traj = trajs_s2d[(ii, jj)]
                 ax.plot(traj[:, 0], traj[:, 1], color="C1", alpha=0.8)
-    fig.savefig(plot_dir / "p1_min_dist.pdf")
+    fig.savefig(plot_dir / "p1_min_dist.pdf", bbox_inches="tight")
+    fig.savefig(plot_dir / "p1_min_dist.png", bbox_inches="tight")
     plt.close(fig)
 
 
