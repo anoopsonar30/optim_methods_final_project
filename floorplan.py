@@ -1,7 +1,9 @@
 import pathlib
+import pickle
 
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.collections import PatchCollection
 from PIL import Image
 
 
@@ -489,5 +491,43 @@ def get_floorplan_figure() -> tuple[plt.Figure, plt.Axes]:
     imshow_extent = imshow_extent / scale
 
     fig, ax = plt.subplots(figsize=(12, 5), layout="constrained")
+    ax.axis("off")
     ax.imshow(image, extent=imshow_extent, alpha=0.5, zorder=3)
     return fig, ax
+
+
+def get_wall_figure() -> tuple[plt.Figure, plt.Axes]:
+    scale = 1e3
+
+    rects = get_rects()
+    rects = rects / scale
+
+    srcs, dests = get_src_dst_scaled()
+
+    # Plot walls.
+    patches = []
+    for rect in rects:
+        patches.append(plt.Polygon(rect, closed=True))
+    col = PatchCollection(patches, facecolor="C3", alpha=0.6, zorder=4)
+
+    fig, ax = plt.subplots(figsize=(12, 5), layout="constrained")
+    ax.axis("off")
+
+    ax.add_collection(col)
+    ax.autoscale_view()
+
+    # Plot dests.
+    ax.scatter(dests[:, 0], dests[:, 1], color="C1", zorder=6)
+
+    # Plot sources.
+    ax.scatter(srcs[:, 0], srcs[:, 1], marker="s", color="C0", zorder=6)
+
+    return fig, ax
+
+
+def load_gcs_trajs():
+    with open("data.pkl", "rb") as f:
+        s2d_data, d2d_data = pickle.load(f)
+    time_srcs_to_dests, length_srcs_to_dests, trajs_s2d = s2d_data
+    time_dests_to_dests, length_dests_to_dests, trajs_d2d = d2d_data
+    return trajs_s2d, trajs_d2d
