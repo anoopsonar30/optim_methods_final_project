@@ -60,7 +60,7 @@ def main():
 
     print("5")
     options = GraphOfConvexSetsOptions()
-    options.preprocessing = False
+    options.preprocessing = True
     options.max_rounded_paths = 50
     start_time = time.time()
     print("Solving GCS...")
