@@ -2,15 +2,14 @@ import pickle
 import time
 
 import ipdb
-import matplotlib.pyplot as plt
 import numpy as np
 import tqdm
-from matplotlib.collections import LineCollection, PatchCollection
 from pydrake.geometry.optimization import GraphOfConvexSetsOptions, Point, VPolytope
 from pydrake.planning import GcsTrajectoryOptimization
-from pydrake.solvers import MathematicalProgram, MosekSolver, Solve
+from pydrake.solvers import MosekSolver
 
-from floorplan import get_dests, get_floorplan_image, get_lines, get_rects, get_sources
+from floorplan import get_dests, get_sources
+
 
 # from pydrake.geometry.optimization import HPolyhedron, Iris, IrisOptions, VPolytope
 

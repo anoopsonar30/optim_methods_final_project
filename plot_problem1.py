@@ -8,7 +8,6 @@ from floorplan import get_floorplan_figure, get_floorplan_image, get_src_dst_sca
 
 
 def main():
-    image = get_floorplan_image()
     srcs, dsts = get_src_dst_scaled()
 
     trajs_s2d, trajs_d2d = load_gcs_trajs()
