@@ -27,9 +27,11 @@ def main():
 
         print("x1.shape: {}".format(x1.shape))
 
+        ls = "-"
+
         n_robot, n_d2d, _, _ = x1.shape
 
-        fig, ax = get_wall_figure()
+        fig, ax = get_wall_figure(dpi=500)
 
         # Plot from src -> dst.
         for rr in range(n_robot):
@@ -38,7 +40,7 @@ def main():
                     if x0[rr, ii, jj] > 0.0:
                         # ls = linestyles[rr]
                         # color = "C1"
-                        ls = "--"
+                        # ls = "--"
                         color = f"C{rr}"
 
                         traj = trajs_s2d[(ii, jj)]
@@ -52,7 +54,7 @@ def main():
                         if x1[rr, kk, ii, jj] > 0.0:
                             # ls = linestyles[rr]
                             # color = "C{}".format(kk + 2)
-                            ls = "--"
+                            # ls = "--"
                             color = f"C{rr}"
 
                             traj = trajs_d2d[(ii, jj)]
@@ -62,7 +64,8 @@ def main():
                                 src, dst = dsts[ii], dsts[jj]
                                 ax.plot([src[0], dst[0]], [src[1], dst[1]], color=color, ls=ls, alpha=0.8)
 
-        fig.savefig(plot_dir / f"p4_min_{label}.pdf")
+        fig.savefig(plot_dir / f"p4_min_{label}.pdf", bbox_inches="tight")
+        fig.savefig(plot_dir / f"p4_min_{label}.png", bbox_inches="tight")
         plt.close(fig)
 
 

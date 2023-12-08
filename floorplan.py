@@ -496,7 +496,7 @@ def get_floorplan_figure() -> tuple[plt.Figure, plt.Axes]:
     return fig, ax
 
 
-def get_wall_figure() -> tuple[plt.Figure, plt.Axes]:
+def get_wall_figure(**kwargs) -> tuple[plt.Figure, plt.Axes]:
     scale = 1e3
 
     rects = get_rects()
@@ -510,7 +510,7 @@ def get_wall_figure() -> tuple[plt.Figure, plt.Axes]:
         patches.append(plt.Polygon(rect, closed=True))
     col = PatchCollection(patches, facecolor="C3", alpha=0.6, zorder=4)
 
-    fig, ax = plt.subplots(figsize=(12, 5), layout="constrained")
+    fig, ax = plt.subplots(figsize=(12, 5), layout="constrained", **kwargs)
     ax.axis("off")
 
     ax.add_collection(col)
