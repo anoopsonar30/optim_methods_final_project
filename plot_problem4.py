@@ -25,27 +25,35 @@ def main():
         x0 = npz["x0"]
         x1 = npz["x1"]
 
+        print("x1.shape: {}".format(x1.shape))
+
         n_robot, n_d2d, _, _ = x1.shape
 
         fig, ax = get_wall_figure()
 
         # Plot from src -> dst.
         for rr in range(n_robot):
-            ls = linestyles[rr]
             for ii in range(n_src):
                 for jj in range(n_dst):
                     if x0[rr, ii, jj] > 0.0:
+                        # ls = linestyles[rr]
+                        # color = "C1"
+                        ls = "--"
+                        color = f"C{rr}"
+
                         traj = trajs_s2d[(ii, jj)]
-                        ax.plot(traj[:, 0], traj[:, 1], color="C1", ls=ls, alpha=0.8)
+                        ax.plot(traj[:, 0], traj[:, 1], color=color, ls=ls, alpha=0.8)
 
         # Plot from dst -> dst.
         for rr in range(n_robot):
-            ls = linestyles[rr]
             for kk in range(n_d2d):
                 for ii in range(n_dst):
                     for jj in range(n_dst):
                         if x1[rr, kk, ii, jj] > 0.0:
-                            color = "C{}".format(kk + 2)
+                            # ls = linestyles[rr]
+                            # color = "C{}".format(kk + 2)
+                            ls = "--"
+                            color = f"C{rr}"
 
                             traj = trajs_d2d[(ii, jj)]
                             if len(traj) > 0:
