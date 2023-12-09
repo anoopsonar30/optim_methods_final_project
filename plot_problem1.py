@@ -24,13 +24,14 @@ def main():
 
     sol_time_npz = np.load("sols/problem1_time.npz")
     sol_dist_npz = np.load("sols/problem1_dist.npz")
+    sol_l2_npz = np.load("sols/problem1_l2dist.npz")
 
     colors = ["C2", "C4", "C5"]
 
     ts = []
     ds = []
 
-    for npz, label in [(sol_time_npz, "time"), (sol_dist_npz, "dist")]:
+    for npz, label in [(sol_time_npz, "time"), (sol_dist_npz, "dist"), (sol_l2_npz, "l2dist")]:
         # (n_src, n_dst)
         x = npz["x"]
 
@@ -60,7 +61,11 @@ def main():
     # Compute percentage change in time and distance
     t_pct = (ts[0] - ts[1]) / ts[1]
     d_pct = (ds[0] - ds[1]) / ds[1]
-    print("Time: {:.3f}%, Distance: {:.3f}%".format(t_pct * 100, d_pct))
+    print("[from min distance] Time: {:.3f}%, Distance: {:.3f}%".format(t_pct * 100, d_pct * 100))
+
+    t_pct = (ts[0] - ts[2]) / ts[2]
+    d_pct = (ds[0] - ds[2]) / ds[2]
+    print("[from min l2] Time: {:.3f}%, Distance: {:.3f}%".format(t_pct * 100, d_pct * 100))
 
 
 if __name__ == "__main__":

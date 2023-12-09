@@ -24,8 +24,12 @@ def main():
 
     sol_time_npz = np.load("sols/problem3_time.npz")
     sol_dist_npz = np.load("sols/problem3_dist.npz")
+    sol_l2_npz = np.load("sols/problem3_l2dist.npz")
 
-    for npz, label in [(sol_time_npz, "time"), (sol_dist_npz, "dist")]:
+    ts = []
+    ds = []
+
+    for npz, label in [(sol_time_npz, "time"), (sol_dist_npz, "dist"), (sol_l2_npz, "l2dist")]:
         # (n_dest, n_dest)
         x0 = npz["x0"]
         # (n_d2d, n_dest, n_dest)
@@ -102,11 +106,23 @@ def main():
         fig.savefig(plot_dir / f"p3_min_{label}.png", bbox_inches="tight")
         plt.close(fig)
 
+        ts.append(total_time)
+        ds.append(total_dist)
+
         robot_times = np.sort(np.array(robot_times))
         robot_dists = np.sort(np.array(robot_dists))
         times_str = ", ".join(["{:.2f}".format(tt) for tt in np.sort(robot_times)])
         dists_str = ", ".join(["{:.2f}".format(tt) for tt in np.sort(robot_dists)])
         print("Times: {}, Dists: {}".format(times_str, dists_str))
+
+    # Compute percentage change in time and distance
+    t_pct = (ts[0] - ts[1]) / ts[1]
+    d_pct = (ds[0] - ds[1]) / ds[1]
+    print("[From min distance] Time: {:.3f}%, Distance: {:.3f}%".format(t_pct * 100, d_pct * 100))
+
+    t_pct = (ts[0] - ts[2]) / ts[2]
+    d_pct = (ds[0] - ds[2]) / ds[2]
+    print("[From min l2] Time: {:.3f}%, Distance: {:.3f}%".format(t_pct * 100, d_pct * 100))
 
 
 if __name__ == "__main__":

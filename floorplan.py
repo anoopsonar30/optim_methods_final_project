@@ -510,7 +510,8 @@ def get_wall_figure(**kwargs) -> tuple[plt.Figure, plt.Axes]:
         patches.append(plt.Polygon(rect, closed=True))
     col = PatchCollection(patches, facecolor="C3", alpha=0.6, zorder=4)
 
-    fig, ax = plt.subplots(figsize=(12, 5), layout="constrained", **kwargs)
+    figsize = 0.6 * np.array([12, 5])
+    fig, ax = plt.subplots(figsize=figsize, layout="constrained", **kwargs)
     ax.axis("off")
 
     ax.add_collection(col)
